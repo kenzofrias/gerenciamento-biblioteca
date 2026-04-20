@@ -20,24 +20,29 @@ namespace gerenciamento_biblioteca.Services
             _context = context;
         }
 
-        public ResultadoDto RealizarEmprestimo(EmprestimoDto dto)
+        private (bool usuarioExiste, int limite) ValidarTipoUsuario(EmprestimoDto dto)
         {
-            bool usuarioExiste = false;
             Aluno aluno = new Aluno();
             Professor professor = new Professor();
-            int limite = 0;
 
             if (dto.TipoUsuario == TipoUsuario.Aluno)
             {
-                usuarioExiste = _context.Alunos.Any(a => a.Id == dto.UsuarioId);
-                limite = aluno.LimiteEmprestimos();
+                var usuarioExiste = _context.Alunos.Any(a => a.Id == dto.UsuarioId);
+                var limite = aluno.LimiteEmprestimos();
+                return (usuarioExiste, limite);
             }
             else if (dto.TipoUsuario == TipoUsuario.Professor)
             {
-                usuarioExiste = _context.Professores.Any(a => a.Id == dto.UsuarioId);
-                limite = professor.LimiteEmprestimos();
+                var usuarioExiste = _context.Professores.Any(a => a.Id == dto.UsuarioId);
+                var limite = professor.LimiteEmprestimos();
+                return (usuarioExiste, limite);
             }
+            return (false, 0);
+        }
 
+        public ResultadoDto RealizarEmprestimo(EmprestimoDto dto)
+        {
+            var (usuarioExiste, limite) = ValidarTipoUsuario(dto);
             if (!usuarioExiste) return ResultadoDto.Erro("Usuário não encontrado.");
 
             var livro = _context.Livros.Find(dto.LivroId);
@@ -74,6 +79,12 @@ namespace gerenciamento_biblioteca.Services
             _context.SaveChanges();
 
             return ResultadoDto.Ok(livro);
+        }
+
+        public List<Emprestimo>? ListarEmprestimos()
+        {
+            var emprestimos = _context.Emprestimos.ToList();
+            return emprestimos;
         }
     }
 }

@@ -39,5 +39,12 @@ namespace gerenciamento_biblioteca.Controllers
 
             return Ok("Devolução realizada com sucesso.");
         }
+
+        [HttpGet("ListarEmprestimos")]
+        public IActionResult ObterEmprestimos()
+        {
+            var emprestimos = _bibliotecaServices.ListarEmprestimos();
+            return Ok(emprestimos);
+        }
     }
 }
