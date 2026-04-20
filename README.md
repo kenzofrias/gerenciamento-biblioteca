@@ -78,7 +78,7 @@ Define as entidades e DTOs utilizados na aplicação.
 ### 👤 Usuários
 |Método|	Rota	|Descrição|
 |---|---|---|
-|GET/POST/PATCH/DELETE	|/Usuarios/Aluno.../|	Métodos para usuários alunos|
+|GET/POST/PATCH/DELETE	|/Usuarios/Aluno...|	Métodos para usuários alunos|
 |GET/POST/PATCH/DELETE	|/Usuarios/Professor/...|	Métodos para usuários professores|
 |GET	|/Usuario/Usuarios/ObterTodos	|Listar todos os usuários cadastrados no sistema|
 
