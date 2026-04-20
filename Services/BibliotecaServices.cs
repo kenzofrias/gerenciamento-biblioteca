@@ -23,17 +23,19 @@ namespace gerenciamento_biblioteca.Services
         public ResultadoDto RealizarEmprestimo(EmprestimoDto dto)
         {
             bool usuarioExiste = false;
+            Aluno aluno = new Aluno();
+            Professor professor = new Professor();
             int limite = 0;
 
             if (dto.TipoUsuario == TipoUsuario.Aluno)
             {
                 usuarioExiste = _context.Alunos.Any(a => a.Id == dto.UsuarioId);
-                limite = 3;
+                limite = aluno.LimiteEmprestimos();
             }
             else if (dto.TipoUsuario == TipoUsuario.Professor)
             {
                 usuarioExiste = _context.Professores.Any(a => a.Id == dto.UsuarioId);
-                limite = 6;
+                limite = professor.LimiteEmprestimos();
             }
 
             if (!usuarioExiste) return ResultadoDto.Erro("Usuário não encontrado.");
